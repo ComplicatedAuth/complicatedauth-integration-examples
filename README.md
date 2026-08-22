@@ -9,13 +9,13 @@ ComplicatedAuth BFF protocol on their own origin.
 | SvelteKit | [`sveltekit/`](./sveltekit/) | Node adapter |
 | Next.js | [Dedicated example repository](https://github.com/ComplicatedAuth/complicatedauth-nextjs-example) | App Router |
 
-Every production recipe uses `RedisReferenceStore`. Keep the Project API key
+Every production recipe uses `RedisReferenceStore`. Keep the scoped Project service credential
 in a secret manager and set:
 
 ```text
 COMPLICATEDAUTH_URL=https://your-auth-api.example
 COMPLICATEDAUTH_PROJECT_UID=00000000-0000-0000-0000-000000000000
-COMPLICATEDAUTH_API_KEY=<secret>
+COMPLICATEDAUTH_SERVICE_CREDENTIAL=<secret>
 REDIS_URL=rediss://...
 ```
 

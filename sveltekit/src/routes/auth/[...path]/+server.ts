@@ -13,7 +13,7 @@ const ready = redis.connect();
 const auth = new ComplicatedAuthServer({
   backendUrl: required("COMPLICATEDAUTH_URL"),
   projectUid: required("COMPLICATEDAUTH_PROJECT_UID"),
-  apiKey: required("COMPLICATEDAUTH_API_KEY"),
+  serviceCredential: required("COMPLICATEDAUTH_SERVICE_CREDENTIAL"),
   store: new RedisReferenceStore({client: redis, keyPrefix: "myapp:auth:"}),
 });
 
