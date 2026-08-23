@@ -9,6 +9,8 @@ ComplicatedAuth BFF protocol on their own origin.
 | SvelteKit | [`sveltekit/`](./sveltekit/) | Node adapter |
 | Next.js | [Dedicated example repository](https://github.com/ComplicatedAuth/complicatedauth-nextjs-example) | App Router |
 
+The [`dokosoko/`](./dokosoko/) environment exercises delegated identity, durable support delivery, and the authenticated embedded widget against local `*.localhost` origins. All DokoSoko-side resources must be created through its Web Interface.
+
 Every production recipe uses `RedisReferenceStore`. Keep the scoped Project service credential
 in a secret manager and set:
 

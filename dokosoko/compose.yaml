@@ -1,0 +1,70 @@
+name: complicatedauth-dokosoko-integration
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: complicatedauth
+      POSTGRES_PASSWORD: complicatedauth
+      POSTGRES_DB: complicatedauth
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U complicatedauth"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  mailpit:
+    image: axllent/mailpit:v1.27.8
+    ports:
+      - "31025:1025"
+      - "38025:8025"
+
+  backend:
+    build: ../../complicatedauth-backend
+    environment:
+      DATABASE_URL: postgres://complicatedauth:complicatedauth@postgres:5432/complicatedauth?sslmode=disable
+      CONSOLE_ORIGIN: http://console.complicatedauth.localhost:33000
+      OAUTH_ISSUER: http://api.complicatedauth.localhost:38080
+      COOKIE_SECURE: "false"
+      SECRET_HASH_KEY: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      DATA_ENCRYPTION_KEYS: dev-v1:AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE
+      EMAIL_SMTP_ADDRESS: mailpit:1025
+      EMAIL_FROM: ComplicatedAuth <no-reply@complicatedauth.localhost>
+      EMAIL_SMTP_STARTTLS: "false"
+      LISTEN_ADDRESS: :8080
+      MIGRATIONS_DIR: /app/migrations
+    ports:
+      - "38080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "/app/complicatedauth", "--health-check"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  console:
+    build: ../../complicatedauth-console
+    environment:
+      INTERNAL_API_URL: http://backend:8080
+      CONSOLE_PUBLIC_ORIGIN: http://console.complicatedauth.localhost:33000
+      DOKOSOKO_API_URL: http://api.dokosoko.localhost:8080
+      DOKOSOKO_WIDGET_HOST: http://widget.dokosoko.localhost:34000
+      DOKOSOKO_WIDGET_ID: ${DOKOSOKO_WIDGET_ID:-}
+      DOKOSOKO_WIDGET_SECRET: ${DOKOSOKO_WIDGET_SECRET:-}
+    extra_hosts:
+      - "api.dokosoko.localhost:host-gateway"
+    ports:
+      - "33000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
