@@ -7,6 +7,7 @@ This Compose project runs the ComplicatedAuth side of the integration on localho
 - Mailpit: `http://localhost:38025`
 
 It expects the DokoSoko API at `http://api.dokosoko.localhost:8080` and its widget host at `http://widget.dokosoko.localhost:34000`.
+Use the DokoSoko Web Interface at `http://localhost:8080` for every identity, support, API, tool, and widget configuration step. The `api.dokosoko.localhost` name is only the host-gateway alias used by the ComplicatedAuth console container; it is not a second administration surface.
 
 Start the stack without widget credentials while configuring OAuth and support delivery:
 
@@ -21,3 +22,5 @@ docker compose up -d --build console
 ```
 
 The widget secret remains server-only. The browser calls the authenticated same-origin token route, which derives the ComplicatedAuth member and Tenant identifiers from the protected console session before creating a DokoSoko bootstrap.
+
+The complete provider-neutral contract, exact local values, security boundaries, and redacted Web Interface evidence are in the ComplicatedAuth documentation guide **External platform integrations**. The verified OAuth callback for this instance is `http://localhost:8080/oauth/callback`; the DokoSoko identity mapping uses `tenant_uid` and leaves the optional installation claim unconfigured.
