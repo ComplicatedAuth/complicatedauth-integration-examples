@@ -4,5 +4,5 @@
   "private": true,
   "type": "module",
   "engines": {"node": ">=20"},
-  "scripts": {"check": "node ./scripts/verify-examples.mjs"}
+  "scripts": {"check": "node ./scripts/verify-examples.mjs && node --test ./dokosoko/mcp-client.test.mjs"}
 }
